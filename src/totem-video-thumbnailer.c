@@ -34,7 +34,6 @@
 #include <glib/gi18n.h>
 #include <cairo.h>
 #include <gst/gst.h>
-#include <totem-disc.h>
 
 #include <locale.h>
 #include <errno.h>
@@ -93,8 +92,7 @@ static void save_pixbuf (GdkPixbuf *pixbuf, const char *path,
 static char *
 get_special_url (GFile *file)
 {
-	char *path, *orig_uri, *uri, *mime_type;
-	TotemDiscMediaType type;
+	char *path, *mime_type;
 
 	path = g_file_get_path (file);
 
@@ -105,17 +103,6 @@ get_special_url (GFile *file)
 		return NULL;
 	}
 	g_free (mime_type);
-
-	uri = NULL;
-	orig_uri = g_file_get_uri (file);
-	type = totem_cd_detect_type_with_url (orig_uri, &uri, NULL);
-	g_free (orig_uri);
-
-	if (type == MEDIA_TYPE_DVD ||
-	    type == MEDIA_TYPE_VCD)
-		return uri;
-
-	g_free (uri);
 
 	return NULL;
 }
